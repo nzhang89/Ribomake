@@ -29,10 +29,10 @@ The Ribomake workflow requires some input files to be specified in either `Setup
 
 * Sample sheet file: a simple sample sheet file in TSV format (tab separated) containing four columns named as `sample_id`, `fq_path`, `seq_type`, and `adapter`. Columns `sample_id`, `fq_path`, and `seq_type` are required. Please **DO NOT** change the column names.
 
-** `sample_id`: stores unique ID/name for each sample;
-** `fq_path`: fastq file path for each sample;
-** `seq_type`: sequencing type. Possible values are "ribo" (for ribo-seq) or "rna" (for rna-seq);
-** `adapter`: specify here if some samples have different adapter sequences;
+  * `sample_id`: stores unique ID/name for each sample;
+  * `fq_path`: fastq file path for each sample;
+  * `seq_type`: sequencing type. Possible values are "ribo" (for ribo-seq) or "rna" (for rna-seq);
+  * `adapter`: specify here if some samples have different adapter sequences;
 
 * Non-coding RNA Bowtie2 index: Ribo-seq reads might contain non-coding RNA contaminations (rRNA, tRNA, snRNA, snoRNA, etc.). We first align reads to these non-coding RNAs using Bowtie2. So you should prepare a Bowtie2 index file for the ncRNAs. ncRNA sequences for many species can be downloaded from Ensembl and tRNA sequences can be downloaded from specific tRNA databases.
 
