@@ -21,7 +21,7 @@ samples: "{samples}"
 trimming:
   skip: "{trimming_skip}" # Skip adapter trimming or not: false or true
   adapter: "{trimming_adapter}" # Ribo-seq sequencing adapter for all samples
-  n_core: 4 # number of cores for cutadapt parallel processing
+  n_core: "{trimming_ncore}" # number of cores for cutadapt parallel processing
   # cutadapt trimming parameters, will also do quality trimming, and N-base and 
   # read length filtering.
   params: "{trimming_params}"
