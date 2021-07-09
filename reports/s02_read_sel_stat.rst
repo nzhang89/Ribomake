@@ -1,0 +1,1 @@
+This table summarizes the number of raw input reads, reads after adapter trimming, and reads after length selection. For RNA-seq samples (seq_type == "rna"), the read length selection step is automatically skipped.

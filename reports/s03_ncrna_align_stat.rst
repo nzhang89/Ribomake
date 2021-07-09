@@ -1,0 +1,1 @@
+This table summarizes the number of input reads, reads that are aligned to ncRNAs, and reads that are not aligned to ncRNAs. The corresponding percentages are also calculated.

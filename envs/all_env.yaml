@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python={python_version}
+  - pandas={pandas_version}
+  - cutadapt={cutadapt_version}
+  - bowtie2={bowtie2_version}
+  - star={star_version}
+  - samtools={samtools_version}
+  - r-shiny={rshiny_version}
+  - r-rmarkdown={rmarkdown_version}
+  - r-dt={dt_version}
+  - r-plotly={plotly_version}

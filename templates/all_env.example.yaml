@@ -1,0 +1,15 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.6.8
+  - pandas=0.25.3
+  - cutadapt=2.6
+  - bowtie2=2.3.5
+  - star=2.6.1d
+  - samtools=1.9
+  - r-shiny=1.4.0
+  - r-rmarkdown=1.18
+  - r-dt=0.12
+  - r-plotly=4.9.1

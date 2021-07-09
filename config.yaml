@@ -1,0 +1,68 @@
+# Default configuration file in yaml format
+
+# Output folder path
+# Strongly recommend using absolute path
+out_folder: "{out_folder}"
+
+# Sample sheet (TSV format, tab separated) file path
+# Four columns: sample_id, fq_path, seq_type, adapter. Columns sample_id and fq_path are required.
+# Please DO NOT change the column names.
+# sample_id: stores unique ID/name for each sample
+# fq_path: fastq file path for each sample
+# seq_type: sequencing type. Possible values are "ribo" (for ribo-seq) or "rna" (for rna-seq)
+# adapter: specify here if some samples have different adapter sequences. Any remaining rows 
+# will use the adapter settings below (line 23).
+samples: "{samples}"
+
+# Adapter trimming (3' end) step
+# If different samples have different adapter sequences, specify them in 
+# sample sheet, which will override the adapter settings below. 
+# Assume single-end sequencing. Use Cutadapt.
+trimming:
+  skip: "{trimming_skip}" # Skip adapter trimming or not: false or true
+  adapter: "{trimming_adapter}" # Ribo-seq sequencing adapter for all samples
+  n_core: 4 # number of cores for cutadapt parallel processing
+  # cutadapt trimming parameters, will also do quality trimming, and N-base and 
+  # read length filtering.
+  params: "{trimming_params}"
+
+# Read length selection step
+# This step is after adapter trimming. Only reads with lengths >= min_len and 
+# <= max_len will be kept.
+read_sel:
+  min_len: "{read_sel_min_len}"
+  max_len: "{read_sel_max_len}"
+
+# ncRNA alignment step
+# First align reads to some ncRNAs (mostly rRNAs and tRNAs). Unaligned reads will 
+# then be mapped to mRNAs. Use Bowtie2.
+ncrna_align:
+  index: "{ncrna_align_index}" # Path of Bowtie2 index for ncRNAs
+  n_core: "{ncrna_align_n_core}" # number of cores for Bowtie2 parallel processing
+  params: "{ncrna_align_params}" # Bowtie2 alignment parameters
+
+# mRNA alignment step
+# Align non-ncRNA reads to transcriptome. Use STAR.
+mrna_align:
+  index: "{mrna_align_index}" # Path of STAR index
+  gtf: "{mrna_align_gtf}" # Path of GTF annotation file
+  n_core: "{mrna_align_n_core}" # number of cores for STAR parallel processing
+  # STAR alignment parameters
+  # The default parameters are crucial for data processing and downstream analysis
+  # so please only add more options to the default if necessary.
+  # default: "--outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts 
+  #           --alignEndsType EndToEnd --readFilesCommand zcat"
+  params: "{mrna_align_params}"
+
+# software/package versions
+# The following versions are tested most thoroughly
+package:
+  python: "{package_python}"
+  pandas: "{package_pandas}"
+  cutadapt: "{package_cutadapt}"
+  bowtie2: "{package_bowtie2}"
+  star: "{package_star}"
+  samtools: "{package_samtools}"
+  rmarkdown: "{package_rmarkdown}"
+  dt: "{package_dt}"
+  plotly: "{package_plotly}"

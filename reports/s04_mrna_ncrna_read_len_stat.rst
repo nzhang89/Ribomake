@@ -1,0 +1,1 @@
+This table summarizes the length distribution for ncRNA aligned reads (from Bowtie2) and non-ncRNA aligned reads (from STAR) over the specified read length ranges. For RNA-seq samples (seq_type == "rna"), the read length stats are not computed since the read length selection step is automatically skipped.

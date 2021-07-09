@@ -1,0 +1,26 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: Each row of sample sheet
+
+type: object
+
+properties:
+  sample_id:
+    type: string
+    description: Sample ID
+  fq_path:
+    type: string
+    description: fastq file path for this sample
+  seq_type:
+    type: string
+    enum: ["ribo", "rna"]
+    description: sequencing type one of [ribo, rna]
+  adapter:
+    type: string
+    pattern: "^[ACGT]+$"
+    description: Adapter sequence for this particular sample
+
+required:
+  - sample_id
+  - fq_path
+  - seq_type

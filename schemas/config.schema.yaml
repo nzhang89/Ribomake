@@ -1,0 +1,113 @@
+$schema: "http://json-schema.org/draft-06/schema#"
+
+description: snakemake configuration file
+
+type: object
+
+properties:
+  out_folder:
+    type: string
+
+  samples:
+    type: string
+
+  trimming:
+    type: object
+    properties:
+      skip:
+        type: boolean
+      adapter:
+        type: string
+        pattern: "^[ACGT]+$"
+      n_core:
+        type: integer
+      params:
+        type: string
+    required:
+      - skip
+      - adapter
+      - n_core
+      - params
+
+  read_sel:
+    type: object
+    properties:
+      min_len:
+        type: integer
+      max_len:
+        type: integer
+    required:
+      - min_len
+      - max_len
+
+  ncrna_align:
+    type: object
+    properties:
+      index:
+        type: string
+      n_core:
+        type: integer
+      params:
+        type: string
+    required:
+      - index
+      - n_core
+      - params
+
+  mrna_align:
+    type: object
+    properties:
+      index:
+        type: string
+      gtf:
+        type: string
+      n_core:
+        type: integer
+      params:
+        type: string
+    required:
+      - index
+      - gtf
+      - n_core
+      - params
+
+  package:
+    type: object
+    properties:
+      python:
+        type: string
+      pandas:
+        type: string
+      cutadapt:
+        type: string
+      bowtie2:
+        type: string
+      star:
+        type: string
+      samtools:
+        type: string
+      rmarkdown:
+        type: string
+      dt:
+        type: string
+      plotly:
+        type: string
+    required:
+      - python
+      - pandas
+      - cutadapt
+      - bowtie2
+      - star
+      - samtools
+      - rmarkdown
+      - dt
+      - plotly
+
+required:
+  - out_folder
+  - samples
+  - trimming
+  - read_sel
+  - ncrna_align
+  - mrna_align
+  - package

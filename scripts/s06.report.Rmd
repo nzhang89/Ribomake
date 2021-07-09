@@ -1,0 +1,206 @@
+---
+title: "Ribosome Profiling Data Processing Report"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    highlight: tango
+    number_sections: no
+    theme: lumen
+    toc: yes
+    toc_float: yes
+---
+
+<style>
+    body {
+        font-size: 14px;
+        text-align: justify;
+    }
+
+    .main-container {
+        max-width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    code {
+        font-size: 75%;
+    }
+
+    code.r {
+        font-size: 90%;
+    }
+
+    div.main-container {
+        max-width: 80%;
+    }
+</style>
+
+```{r report_setup, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE}
+suppressPackageStartupMessages(library(DT))
+suppressPackageStartupMessages(library(plotly))
+
+sample_info_file = snakemake@config[["samples"]]
+
+s02_read_sel_stat_file = snakemake@input[["s02_read_sel_stat"]]
+s03_ncrna_align_stat_file = snakemake@input[["s03_ncrna_align_stat"]]
+s04_mrna_align_stat_file = snakemake@input[["s04_mrna_align_stat"]]
+s04_read_len_stat_file = snakemake@input[["s04_mrna_ncrna_read_len_stat"]]
+
+plotly_modebars_remove = c("zoom2d", "pan2d", "select2d", "lasso2d", "zoomIn2d", "zoomOut2d", "autoScale2d", "toggleSpikelines", 
+	"hoverClosestCartesian", "hoverCompareCartesian")
+```
+
+### Summary
+
+
+
+### Sample
+
+```{r sample_info, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE}
+sample_info = read.table(sample_info_file, sep="\t", header=TRUE, fill=TRUE)
+colnames(sample_info) = c("Sample ID", "FASTQ Path", "Experiment Type", "Adapter")
+
+htmltools::div(align="center", 
+    DT::datatable(sample_info, width="90%", height="100%", options=list(searching=TRUE, pageLength=10, bPaginate=TRUE, 
+        columnDefs=list(list(className="dt-center", targets=1:ncol(sample_info))))
+    )
+)
+```
+
+### Adapter Trimming
+
+<details>
+    <summary>Figure legend notation</summary>
+    <ul>
+        <li><strong>Raw reads</strong>: Number of raw reads</li>
+        <li><strong>After adapter trimming</strong>: Number of reads after adapter trimming</li>
+        <li><strong>After read length filtering</strong>: Number of reads after length filtering</li>
+    </ul>
+</details>
+
+```{r s02_read_sel, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE, out.width="100%"}
+s02_read_sel_stat = read.table(s02_read_sel_stat_file, sep="\t", header=TRUE)
+
+p = plot_ly(s02_read_sel_stat, x=~sample_id, y=~raw_reads, type="bar", name="Raw reads") %>% 
+    add_trace(y=~trimming, name="After adapter trimming") %>%
+    add_trace(y=~read_sel, name="After read length filtering") %>%
+    layout(title="Adapter Trimming Result (Number of Reads)", xaxis=list(title="Sample"), 
+        yaxis=list(title="Number of Reads"), barmode="group") %>%
+    config(modeBarButtonsToRemove=plotly_modebars_remove)
+p
+```
+
+### non-coding RNA (ncRNA) Alignment
+
+<details>
+    <summary>Figure legend notation</summary>
+    <ul>
+        <li><strong>Input reads</strong>: Number of input reads</li>
+        <li><strong>ncRNA reads</strong>: Number of reads that are mapped to ncRNAs</li>
+        <li><strong>non-ncRNA reads</strong>: Number of reads that are not mapped to ncRNAs</li>
+        <br />
+        <li><strong>% ncRNA reads</strong>: Percentage of reads that are mapped to ncRNAs</li>
+        <li><strong>% non-ncRNA reads</strong>: Percentage of reads that are not mapped to ncRNAs</li>
+    </ul>
+</details>
+
+```{r s03_ncrna_align, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE, out.width="100%"}
+s03_ncrna_align = read.table(s03_ncrna_align_stat_file, sep="\t", header=TRUE)
+
+p1 = plot_ly(s03_ncrna_align, x=~sample_id, y=~read_sel, type="bar", name="Input reads") %>%
+    add_trace(y=~ncrna, name="ncRNA reads") %>%
+    add_trace(y=~non_ncrna, name="non-ncRNA reads") %>%
+    layout(title="ncRNA Alignment Distribution (Number of Reads)", xaxis=list(title="Sample"), 
+        yaxis=list(title="Number of Reads"), barmode="group") %>%
+    config(modeBarButtonsToRemove=plotly_modebars_remove)
+
+p2 = plot_ly(s03_ncrna_align, x=~sample_id, y=~ncrna_pct, type="bar", name="% ncRNA reads", marker=list(color="#ff7f0e")) %>%
+    add_trace(y=~non_ncrna_pct, name="% non-ncRNA reads", marker=list(color="#2ca02c")) %>%
+    layout(title="ncRNA Alignment Distribution (Percentage of Reads)", xaxis=list(title="Sample"), 
+        yaxis=list(title="Percentage of Reads"), barmode="stack") %>%
+    config(modeBarButtonsToRemove=plotly_modebars_remove)
+p1
+p2
+```
+
+### Genome Alignment
+
+<details>
+    <summary>Figure legend notation</summary>
+    <ul>
+        <li><strong>Input reads</strong>: Number of input non-ncRNA reads </li>
+        <li><strong>Unique reads</strong>: Number of reads that are mapped to one unique genomic location</li>
+        <li><strong>Multi-reads</strong>: Number of reads that are mapped to multiple genomic locations</li>
+        <li><strong>Unmapped reads</strong>: Number of unmapped reads</li>
+        <br />
+        <li><strong>% Unique reads</strong>: Percentage of reads that are mapped to one unique genomic location</li>
+        <li><strong>% Multi-reads</strong>: Percentage of reads that are mapped to multiple genomic locations</li>
+        <li><strong>% Unmapped reads</strong>: Percentage of unmapped reads</li>
+    </ul>
+</details>
+
+```{r s04_mrna_align, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE, out.width="100%"}
+s04_mrna_align = read.table(s04_mrna_align_stat_file, sep="\t", header=TRUE)
+
+p1 = plot_ly(s04_mrna_align, x=~sample_id, y=~non_ncrna, type="bar", name="Input reads") %>%
+    add_trace(y=~unique, name="Unique reads") %>%
+    add_trace(y=~multi, name="Multi-reads") %>%
+    add_trace(y=~unmapped, name="Unmapped reads") %>%
+    layout(title="Genome Alignment Distribution (Number of Reads)", xaxis=list(title="Sample"), 
+        yaxis=list(title="Number of Reads"), barmode="group") %>%
+    config(modeBarButtonsToRemove=plotly_modebars_remove)
+
+p2 = plot_ly(s04_mrna_align, x=~sample_id, y=~unique_pct, type="bar", name="% Unique reads", marker=list(color="#ff7f0e")) %>%
+    add_trace(y=~multi_pct, name="% Multi-reads", marker=list(color="#2ca02c")) %>%
+    add_trace(y=~unmapped_pct, name="% Unmapped reads", marker=list(color="#d62728")) %>%
+    layout(title="Genome Alignment Distribution (Percentage of Reads)", xaxis=list(title="Sample"), 
+        yaxis=list(title="Percentage of Reads"), barmode="stack") %>%
+    config(modeBarButtonsToRemove=plotly_modebars_remove)
+p1
+p2
+```
+
+### Read Length Distribution
+
+<details>
+    <summary>Figure legend notation</summary>
+    <ul>
+        <li><strong>non-ncRNA</strong>: Number of reads that are not mapped to ncRNAs but mapped to reference genome</li>
+        <li><strong>ncRNA</strong>: Number of reads mapped to ncRNAs</li>
+        <br />
+        <li><strong>% non-ncRNA</strong>: Percentage of reads that are not mapped to ncRNAs but mapped to reference genome</li>
+        <li><strong>% ncRNA</strong>: Percentage of reads mapped to ncRNAs</li>
+    </ul>
+</details>
+
+```{r s04_read_len, warning=FALSE, message=FALSE, echo=FALSE, eval=TRUE, out.width="100%"}
+s04_read_len = read.table(s04_read_len_stat_file, sep="\t", header=TRUE)
+
+p = list()
+p_idx = 1
+for(i in seq(1, nrow(sample_info))) {
+    sample_id = as.character(sample_info[i, "Sample ID"])
+    expr_type = as.character(sample_info[i, "Experiment Type"])
+
+    if(expr_type == "ribo") {
+        cols_use = c(sprintf("%s_ncrna", sample_id), sprintf("%s_non_ncrna", sample_id))
+        plot_df = s04_read_len[, c("read_len", cols_use)]
+        plot_df[, cols_use] = t(t(plot_df[, cols_use]) / colSums(plot_df[, cols_use])) # to percentage
+        colnames(plot_df) = c("read_len", "ncrna", "non_ncrna")
+
+        p1 = plot_ly(plot_df, type="bar", x=~read_len, y=~non_ncrna, name="% non-ncRNA") %>%
+                layout(xaxis=list(title="Read Length"), yaxis=list(title="Percentage of Reads"))
+        p2 = plot_ly(plot_df, type="bar", x=~read_len, y=~ncrna, name="% ncRNA") %>%
+                layout(xaxis=list(title="Read Length"), yaxis=list(title="Percentage of Reads"))
+
+        p[[p_idx]] = subplot(p1, p2, shareX=TRUE, shareY=TRUE) %>%
+            layout(title=sprintf("Read Length Distribution (Percentage of Reads): %s", sample_id)) %>%
+    		config(modeBarButtonsToRemove=plotly_modebars_remove)
+        p_idx = p_idx + 1
+    }
+}
+
+htmltools::tagList(p)
+```
+
+<div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
