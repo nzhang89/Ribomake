@@ -7,7 +7,7 @@ dependencies:
   - pandas=0.25.3
   - cutadapt=2.6
   - bowtie2=2.3.5
-  - star=2.6.1d
+  - star=2.7.3a
   - samtools=1.9
   - r-shiny=1.4.0
   - r-rmarkdown=1.18
