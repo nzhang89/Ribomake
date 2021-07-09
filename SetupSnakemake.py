@@ -32,7 +32,7 @@ def load_default_params():
 		"pandas" : "0.25.3",
 		"cutadapt" : "2.6", 
 		"bowtie2" : "2.4.4", 
-		"star" : "2.6.1d", 
+		"star" : "2.7.3a", 
 		"samtools" : "1.12", 
 		"shiny": "1.4.0", 
 		"rmarkdown" : "1.18", 
