@@ -62,7 +62,7 @@ usage: SetupSnakemake.py [-h] [--skip_adapter {False,True}] [--adapter ADAPTER] 
                          --ncrna_index NCRNA_INDEX [--bowtie2_ncore BOWTIE2_NCORE] [--bowtie2_params BOWTIE2_PARAMS] --mrna_index
                          MRNA_INDEX --gtf GTF [--star_ncore STAR_NCORE] [--star_params STAR_PARAMS] [--python PYTHON]
                          [--pandas PANDAS] [--cutadapt CUTADAPT] [--bowtie2 BOWTIE2] [--star STAR] [--samtools SAMTOOLS]
-                         [--rmarkdown RMARKDOWN] [--dt DT] [--plotly PLOTLY]
+                         [--shiny SHINY] [--rmarkdown RMARKDOWN] [--dt DT] [--plotly PLOTLY]
                          sample_sheet snakemake_folder analysis_folder
 
 Set up Snakemake directory for ribosome profiling data analysis
@@ -103,9 +103,10 @@ Software package versions:
   --python PYTHON                    Python version (default: 3.6.8)
   --pandas PANDAS                    pandas version (default: 0.25.3)
   --cutadapt CUTADAPT                Cutadapt version (default: 2.6)
-  --bowtie2 BOWTIE2                  Bowtie2 version (default: 2.3.5)
-  --star STAR                        STAR version (default: 2.6.1d)
-  --samtools SAMTOOLS                Samtools version (default: 1.9)
+  --bowtie2 BOWTIE2                  Bowtie2 version (default: 2.4.4)
+  --star STAR                        STAR version (default: 2.7.3a)
+  --samtools SAMTOOLS                Samtools version (default: 1.12)
+  --shiny SHINY                      shiny version (default: 1.4.0)
   --rmarkdown RMARKDOWN              rmarkdown version (default: 1.18)
   --dt DT                            dt version (default: 0.12)
   --plotly PLOTLY                    plotly version (default: 4.9.1)
