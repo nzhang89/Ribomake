@@ -34,10 +34,12 @@ def load_default_params():
 		"bowtie2" : "2.4.4", 
 		"star" : "2.7.3a", 
 		"samtools" : "1.12", 
-		"shiny": "1.4.0", 
-		"rmarkdown" : "1.18", 
-		"dt": "0.12", 
-		"plotly": "4.9.1"
+		"r-base": "3.5", 
+		"r-cairo": "1.5", 
+		"r-shiny": "1.4.0", 
+		"r-rmarkdown" : "1.18", 
+		"r-dt": "0.12", 
+		"r-plotly": "4.9.1"
 	}
 
 
@@ -146,14 +148,18 @@ def process_args():
 		help="STAR version (default: %s)" %(default["star"]))
 	s00_package.add_argument("--samtools", type=str, default=default["samtools"], 
 		help="Samtools version (default: %s)" %(default["samtools"]))
-	s00_package.add_argument("--shiny", type=str, default=default["shiny"], 
-		help="shiny version (default: %s)" %(default["shiny"])), 
-	s00_package.add_argument("--rmarkdown", type=str, default=default["rmarkdown"], 
-		help="rmarkdown version (default: %s)" %(default["rmarkdown"])), 
-	s00_package.add_argument("--dt", type=str, default=default["dt"], 
-		help="dt version (default: %s)" %(default["dt"])), 
-	s00_package.add_argument("--plotly", type=str, default=default["plotly"], 
-		help="plotly version (default: %s)" %(default["plotly"]))
+	s00_package.add_argument("--r_base", type=str, default=default["r-base"], 
+		help="r-base version (default: %s)" %(default["r-base"])), 
+	s00_package.add_argument("--r_cairo", type=str, default=default["r-cairo"], 
+		help="r-cairo version (default: %s)" %(default["r-cairo"])), 
+	s00_package.add_argument("--r_shiny", type=str, default=default["r-shiny"], 
+		help="r-shiny version (default: %s)" %(default["r-shiny"])), 
+	s00_package.add_argument("--r_rmarkdown", type=str, default=default["r-rmarkdown"], 
+		help="r-rmarkdown version (default: %s)" %(default["r-rmarkdown"])), 
+	s00_package.add_argument("--r_dt", type=str, default=default["r-dt"], 
+		help="r-dt version (default: %s)" %(default["r-dt"])), 
+	s00_package.add_argument("--r_plotly", type=str, default=default["r-plotly"], 
+		help="r-plotly version (default: %s)" %(default["r-plotly"]))
 
 	args = parser.parse_args()
 
@@ -168,7 +174,7 @@ def setup_config(args, config_file, out_file):
 
 		config["trimming"]["skip"] = bool(strtobool(args.skip_adapter))
 		config["trimming"]["adapter"] = args.adapter
-		config["trimming"]["ncore"] = args.cutadapt_ncore
+		config["trimming"]["n_core"] = args.cutadapt_ncore
 		config["trimming"]["params"] = args.cutadapt_params
 
 		config["read_sel"]["min_len"] = args.min_read_len
@@ -189,10 +195,12 @@ def setup_config(args, config_file, out_file):
 		config["package"]["bowtie2"] = args.bowtie2
 		config["package"]["star"] = args.star
 		config["package"]["samtools"] = args.samtools
-		config["package"]["shiny"] = args.shiny
-		config["package"]["rmarkdown"] = args.rmarkdown
-		config["package"]["dt"] = args.dt
-		config["package"]["plotly"] = args.plotly
+		config["package"]["r-base"] = args.r_base
+		config["package"]["r-cairo"] = args.r_cairo
+		config["package"]["r-shiny"] = args.r_shiny
+		config["package"]["r-rmarkdown"] = args.r_rmarkdown
+		config["package"]["r-dt"] = args.r_dt
+		config["package"]["r-plotly"] = args.r_plotly
 
 	with open(out_file, "wt") as f:
 		yaml.dump(config, f, default_flow_style=False, sort_keys=False, indent=2)
@@ -208,10 +216,12 @@ def setup_env(args, env_file, out_file):
 		package_ver.append("bowtie2=%s" %(args.bowtie2))
 		package_ver.append("star=%s" %(args.star))
 		package_ver.append("samtools=%s" %(args.samtools))
-		package_ver.append("r-shiny=%s" %(args.shiny))
-		package_ver.append("r-rmarkdown=%s" %(args.rmarkdown))
-		package_ver.append("r-dt=%s" %(args.dt))
-		package_ver.append("r-plotly=%s" %(args.plotly))
+		package_ver.append("r-base=%s" %(args.r_base))
+		package_ver.append("r-cairo=%s" %(args.r_cairo))
+		package_ver.append("r-shiny=%s" %(args.r_shiny))
+		package_ver.append("r-rmarkdown=%s" %(args.r_rmarkdown))
+		package_ver.append("r-dt=%s" %(args.r_dt))
+		package_ver.append("r-plotly=%s" %(args.r_plotly))
 
 		env["dependencies"] = package_ver
 
