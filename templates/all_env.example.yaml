@@ -9,6 +9,8 @@ dependencies:
   - bowtie2=2.3.5
   - star=2.7.3a
   - samtools=1.12
+  - r-base=3.5
+  - r-cairo=1.5
   - r-shiny=1.4.0
   - r-rmarkdown=1.18
   - r-dt=0.12

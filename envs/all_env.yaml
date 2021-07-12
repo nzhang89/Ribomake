@@ -9,6 +9,8 @@ dependencies:
   - bowtie2={bowtie2_version}
   - star={star_version}
   - samtools={samtools_version}
+  - r-base={rbase_version}
+  - r-cairo={rcairo_version}
   - r-shiny={rshiny_version}
   - r-rmarkdown={rmarkdown_version}
   - r-dt={dt_version}
