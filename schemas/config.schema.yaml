@@ -86,11 +86,17 @@ properties:
         type: string
       samtools:
         type: string
-      rmarkdown:
+      r-base:
         type: string
-      dt:
+      r-cairo:
         type: string
-      plotly:
+      r-shiny:
+        type: string
+      r-rmarkdown:
+        type: string
+      r-dt:
+        type: string
+      r-plotly:
         type: string
     required:
       - python
@@ -99,9 +105,12 @@ properties:
       - bowtie2
       - star
       - samtools
-      - rmarkdown
-      - dt
-      - plotly
+      - r-base
+      - r-cairo
+      - r-shiny
+      - r-rmarkdown
+      - r-dt
+      - r-plotly
 
 required:
   - out_folder
