@@ -30,7 +30,7 @@ The Ribomake workflow requires some input files to be specified in either `Setup
 * Sample sheet file: a simple sample sheet file in TSV format (tab separated) containing four columns named as `sample_id`, `fq_path`, `seq_type`, and `adapter`. Columns `sample_id`, `fq_path`, and `seq_type` are required. Please **DO NOT** change the column names.
 
   * `sample_id`: stores unique ID/name for each sample;
-  * `fq_path`: fastq file path for each sample;
+  * `fq_path`: fastq file path for each sample (recommend using absolute path);
   * `seq_type`: sequencing type. Possible values are "ribo" (for ribo-seq) or "rna" (for rna-seq);
   * `adapter`: specify here if some samples have different adapter sequences;
 
@@ -54,7 +54,9 @@ Next, we will set up a Snakemake workflow folder. There are two ways to achieve 
 
 * Method 1 (Recommended):
 
-Execute `SetupSnakemake.py` script. Run `python SetupSnakemake.py -h` to see the full list of arguments. The `snakemake_folder` is where the codes of the workflow are put into. It should be different from the current downloaded repository folder. The `analysis_folder` is where the output files and report should be put into.
+Execute `SetupSnakemake.py` script. This script helps to complete `config.yaml` and `envs/all_env.yaml` files, including the sample sheet file, Snakemake codes folder, data processing output folder, non-coding RNA Bowtie2 index path, STAR index path, STAR GTF file, etc.
+
+Run `python SetupSnakemake.py -h` to see the full list of arguments. The `snakemake_folder` is where the codes of the workflow are put into. It should be different from the current downloaded repository folder. The `analysis_folder` is where the output files and report should be put into.
 
 ```
 usage: SetupSnakemake.py [-h] [--skip_adapter {False,True}] [--adapter ADAPTER] [--cutadapt_ncore CUTADAPT_NCORE]
